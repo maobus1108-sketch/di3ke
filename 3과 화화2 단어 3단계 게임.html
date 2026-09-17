@@ -110,9 +110,9 @@ td.num{text-align:right}
 <p class="lockmsg" id="lockMsg"></p>
 
 <section class="panel on" id="p1">
-  <p class="hint">카드 12장을 모두 눌러 뜻을 확인한 뒤, 확인 퀴즈 5문항을 모두 맞히면 2단계가 열립니다. 카드를 누르면 발음도 함께 들립니다.</p>
+  <p class="hint">카드 11장을 모두 눌러 뜻을 확인한 뒤, 확인 퀴즈 5문항을 모두 맞히면 2단계가 열립니다. 카드를 누르면 발음도 함께 들립니다.</p>
   <div class="bar">
-    <span class="chip">뒤집은 카드 <b id="learnCount">0 / 12</b></span>
+    <span class="chip">뒤집은 카드 <b id="learnCount">0 / 11</b></span>
     <span class="chip">확인 퀴즈 <b id="c1Prog">0 / 5</b></span>
     <button class="ghost" id="flipAll">전체 뒤집기</button>
     <button class="ghost" id="flipReset">전체 덮기</button>
@@ -141,9 +141,9 @@ td.num{text-align:right}
 </section>
 
 <section class="panel" id="p3">
-  <p class="hint">왼쪽 12장은 한어병음, 오른쪽 12장은 한국어 뜻입니다. 180초 안에 12쌍을 모두 찾으세요.</p>
+  <p class="hint">왼쪽 11장은 한어병음, 오른쪽 11장은 한국어 뜻입니다. 180초 안에 11쌍을 모두 찾으세요.</p>
   <div class="bar">
-    <span class="chip">찾은 짝 <b id="g3pair">0</b> / 12</span>
+    <span class="chip">찾은 짝 <b id="g3pair">0</b> / 11</span>
     <span class="chip">남은 시간 <b id="g3time">180초</b></span>
     <span class="chip">시도 <b id="g3moves">0</b>회</span>
     <button class="ghost" id="g3reset">카드 새로 섞기</button>
@@ -174,6 +174,7 @@ td.num{text-align:right}
 
 <script>
 (function(){
+  // 11개 단어 데이터 목록
   var WORDS = [
     { h:'哪儿', p:'nǎr', e:'❓', k:'어디', u:'你哪儿不舒服？ 너 어디 안 좋아?' },
     { h:'舒服', p:'shūfu', e:'📅', k:'편안하다', u:'你哪儿不舒服？ 너 어디 불편해?' },
@@ -185,8 +186,8 @@ td.num{text-align:right}
     { h:'(一)点儿', p:'(yì)diǎnr', e:'🤩', k:'조금,다소', u:'吃(一)点儿药就行。 약 조금 먹으면 됩니다.' },
     { h:'药', p:'yào', e:'😰', k:'약', u:'要按时吃药。 제 시간에 약을 먹어야 해.' },
     { h:'行', p:'xíng', e:'😢', k:'좋다,되다', u:'吃点儿药就行。 약 조금 먹으면 됩니다.' },
-    { h:'大夫', p:'dàifu', e:'👍', k:'의사', u:'谢谢大夫。 고맙습니다, 의사 선생님.' },
-   ];
+    { h:'大夫', p:'dàifu', e:'👍', k:'의사', u:'谢谢大夫。 고맙습니다, 의사 선생님.' }
+  ];
 
   function shuffle(arr){
     var a = arr.slice();
@@ -337,8 +338,8 @@ td.num{text-align:right}
     });
   })();
   function markLearn(){
-    document.getElementById('learnCount').textContent = learned + ' / 12';
-    document.getElementById('c1Start').disabled = (learned < 12);
+    document.getElementById('learnCount').textContent = learned + ' / ' + WORDS.length;
+    document.getElementById('c1Start').disabled = (learned < WORDS.length);
   }
   document.getElementById('flipAll').addEventListener('click', function(){
     [].slice.call(document.querySelectorAll('#grid1 .flip')).forEach(function(c){
@@ -636,7 +637,7 @@ td.num{text-align:right}
       a.el.classList.remove('sel'); b.el.classList.remove('sel');
       a.el.classList.add('done'); b.el.classList.add('done');
       g3.pairs++; document.getElementById('g3pair').textContent = g3.pairs;
-      if(g3.pairs === 12){
+      if(g3.pairs === WORDS.length){
         clearInterval(g3.timer); g3.lock = true; var used = LIMIT - g3.time;
         clearStage(3, { s3t:used, s3m:g3.moves });
         msg3('전체 완료! ' + used + '초, 시도 ' + g3.moves + '회. 모든 단계를 클리어했습니다!', '기록판 보기', function(){ goTab('p5'); });
@@ -671,7 +672,7 @@ td.num{text-align:right}
     document.getElementById('g3pair').textContent = '0'; document.getElementById('g3moves').textContent = '0';
     paintTime();
     msg3('왼쪽 한 장과 오른쪽 한 장을 뒤집어 짝을 찾으세요.', '시작', function(){
-      g3.lock = false; startTimer(); msg3('타이머 작동 중! 12쌍을 모두 찾으세요.', null, null);
+      g3.lock = false; startTimer(); msg3('타이머 작동 중! ' + WORDS.length + '쌍을 모두 찾으세요.', null, null);
     });
   }
   document.getElementById('g3reset').addEventListener('click', buildBoard3);
